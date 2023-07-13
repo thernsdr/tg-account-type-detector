@@ -29,18 +29,18 @@ async def get_type_via_userbot(username: str, api_id: int, api_hash: str) -> str
             peer_data = await app.invoke(ResolveUsername(username=username))
             peer_type = type(peer_data.peer)
 
-            if peer_type == pyrogram_types.peer_user.PeerUser:  # Пользователь или бот
+            if peer_type == pyrogram_types.peer_user.PeerUser:  # User or bot
                 if peer_data.users[0].bot:
                     return "bot"
                 else:
                     return "user"
-            elif peer_type == pyrogram_types.peer_channel.PeerChannel:  # Групповой чат или канал
+            elif peer_type == pyrogram_types.peer_channel.PeerChannel:  # Group chat or channel
                 return "channel"
 
-        except UsernameNotOccupied:  # Юзернейм свободен
+        except UsernameNotOccupied:  # The username is not occupied
             return "invalid"
 
-        except UsernameInvalid:  # Юзернейм невалиден (например, два символа)
+        except UsernameInvalid:  # The username is invalid
             return "invalid"
 
         return "unknown"
@@ -71,6 +71,6 @@ async def get_username_info(username: str, api_id: int, api_hash: str) -> str:
         elif "members" in specific_str:
             return "group"
 
-    # Программа доходит сюда, если это пользователь / бот / не получилось определить методом HTML-парсинга
+    # The program comes here if it is a user / bot / could not be determined by HTML parsing
 
     return await get_type_via_userbot(username, api_id, api_hash)
